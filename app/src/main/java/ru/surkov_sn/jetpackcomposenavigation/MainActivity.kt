@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -21,6 +22,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -76,8 +78,11 @@ class MainActivity : ComponentActivity() {
     ) {
         JetpackComposeNavigationTheme {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+            val context = LocalContext.current
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor =  MaterialTheme.colorScheme.secondary,
                 topBar = { TopBarNavigation(scrollBehavior) },
                 bottomBar = {
                     BottomNavigationBar(navController)
@@ -90,13 +95,25 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController){
-    NavigationBar{
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor =  MaterialTheme.colorScheme.secondary,
+    ){
         val backStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry?.destination?.route
         val context = LocalContext.current
         NavBarItems.BarItems.forEach { navItems->
             NavigationBarItem(
-                selected = currentRoute ==navItems.route,
+                selected = currentRoute == navItems.route,
+                colors = NavigationBarItemColors(
+                    selectedIconColor = MaterialTheme.colorScheme.tertiary,
+                    selectedTextColor =  MaterialTheme.colorScheme.tertiary,
+                    unselectedIconColor = MaterialTheme.colorScheme.tertiary,
+                    unselectedTextColor = MaterialTheme.colorScheme.tertiary,
+                    disabledIconColor = MaterialTheme.colorScheme.onPrimary,
+                    disabledTextColor = MaterialTheme.colorScheme.onPrimary,
+                    selectedIndicatorColor = MaterialTheme.colorScheme.onPrimary
+                ),
                 onClick = {
                     when(navItems.route){
                         NavRoutes.Menu.route -> {
@@ -114,14 +131,13 @@ fun BottomNavigationBar(navController: NavController){
 
                 },
                 icon = {Icon(imageVector = navItems.image, contentDescription = navItems.title)},
-                label = {
-                    Text(text = navItems.title)
-                },
+                label = { Text(text = navItems.title)},
             )
 
         }
     }
 }
+
 
 object NavBarItems{
     val BarItems = listOf(
@@ -131,7 +147,7 @@ object NavBarItems{
             route = "home"
         ),
         BarItem(
-            title = "Расписание",
+            title = "Занятия",
             image = Icons.Filled.DateRange,
             route = "shedule"
         ),
@@ -165,8 +181,10 @@ data class BarItem(
 fun TopBarNavigation(scrollBehavior:TopAppBarScrollBehavior){
     CenterAlignedTopAppBar(
         colors = topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
-            titleContentColor = MaterialTheme.colorScheme.primary
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.tertiary,
+            navigationIconContentColor = MaterialTheme.colorScheme.tertiary,
+            actionIconContentColor = MaterialTheme.colorScheme.tertiary
         ),
         title = { Text(
             text ="Главный",
@@ -178,7 +196,7 @@ fun TopBarNavigation(scrollBehavior:TopAppBarScrollBehavior){
         )},
         navigationIcon = {
             IconButton(
-                onClick = {}
+                onClick = {},
             ) {
                 Icon(
 
@@ -204,25 +222,25 @@ fun TopBarNavigation(scrollBehavior:TopAppBarScrollBehavior){
 
 @Composable
 fun Home(){
-    Text("Home Screen", fontSize = 30.sp)
+    Text("Home Screen", fontSize = 30.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }
 @Composable
 fun Shedule(){
-    Text("Shedule Screen", fontSize = 30.sp)
+    Text("Shedule Screen", fontSize = 30.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }
 @Composable
 fun Journal(){
-    Text("Journal Screen", fontSize = 30.sp)
+    Text("Journal Screen", fontSize = 30.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
 fun RecordBook(){
-    Text("RecordBook Screen", fontSize = 30.sp)
+    Text("RecordBook Screen", fontSize = 30.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }
 
 @Composable
 fun Menu(){
-    Text("Menu Screen", fontSize = 30.sp)
+    Text("Menu Screen", fontSize = 30.sp, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
 }
 
 sealed class NavRoutes(val route: String) {
