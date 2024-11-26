@@ -78,7 +78,6 @@ class MainActivity : ComponentActivity() {
     ) {
         JetpackComposeNavigationTheme {
             val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
-            val context = LocalContext.current
             Scaffold(
                 modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
                 containerColor = MaterialTheme.colorScheme.primary,
